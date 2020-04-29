@@ -111,10 +111,10 @@ router.delete('/:id', auth, async (req, res) => {
   }
 });
 
-// @route   PUT api/contacts/interactions/:id
+// @route   POST api/contacts/interactions/:id
 // @desc    Add an interaction for a contact
 // @access  Private
-router.put(
+router.post(
   '/interactions/:id',
   [
     auth,
@@ -177,7 +177,8 @@ router.delete('/interactions/:id/:interaction_id', auth, async (req, res) => {
     }
 
     // Remove it!
-    await interaction.remove();
+    await contact.interactions.pull(interaction.id);
+    await contact.save();
 
     res.json({ msg: 'Interaction deleted' });
   } catch (err) {
