@@ -1,78 +1,40 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Table, Button, Pane, Dialog, TextInput } from 'evergreen-ui';
-import { useHistory, Link } from 'react-router-dom';
-import { addContact } from '../../actions/contacts';
-import { connect } from 'react-redux';
+import { Pane, Spinner } from 'evergreen-ui';
+import ContactsTable from './ContactsTable';
+import AddContactForm from './AddContactForm';
+import { useDispatch, useSelector } from 'react-redux';
+import { getContacts } from '../../actions/contacts';
 
-const Contacts = ({ addContact, contacts: { contacts, loading } }) => {
-  const history = useHistory();
+const Contacts = () => {
+  const dispatch = useDispatch();
+  const contacts = useSelector((state) => state.contactsReducer);
+  const loading = contacts.loading;
 
-  const [modalState, setModalState] = useState({ isShown: false });
-
-  const [formData, setFormData] = useState({
-    name: '',
-    context: '',
-  });
-
-  const { name, context } = formData;
-
-  const onChange = (e) =>
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-
-  const handleSubmit = () => {
-    addContact(formData);
-    // setModalState({ isShown: false });
-  };
+  useEffect(() => {
+    dispatch(getContacts());
+  }, [contacts, loading]);
 
   return (
     <Fragment>
-      <h2>Contacts</h2>
-      <Pane>
-        <Dialog
-          isShown={modalState.isShown}
-          title='Add contact'
-          onCloseComplete={() => handleSubmit()}
-          confirmLabel='Confirm'
+      {contacts === null ? (
+        <Pane
+          display='flex'
+          alignItems='center'
+          justifyContent='center'
+          height={400}
         >
-          <TextInput
-            name='name'
-            placeholder='Name...'
-            value={name}
-            onChange={(e) => onChange(e)}
-            marginBottom={16}
-          />
-          <TextInput
-            name='context'
-            placeholder='Context...'
-            value={context}
-            onChange={(e) => onChange(e)}
-          />
-        </Dialog>
-
-        <Button
-          iconBefore='plus'
-          onClick={() => setModalState({ isShown: true })}
-          marginBottom={16}
-        >
-          Add Contact
-        </Button>
-      </Pane>
-      <Table.Head>
-        <Table.SearchHeaderCell />
-        <Table.TextHeaderCell>Last Interaction</Table.TextHeaderCell>
-      </Table.Head>
-      <Table.Body>
-        {contacts.map((contact) => (
-          <Table.Row
-            key={contact._id}
-            isSelectable
-            onSelect={() => history.push(`/contacts/${contact._id}`)}
-          >
-            <Table.TextCell>{contact.name}</Table.TextCell>
-          </Table.Row>
-        ))}
-      </Table.Body>
+          <Spinner />
+        </Pane>
+      ) : (
+        <Fragment>
+          <Pane>
+            <h2>Contacts</h2>
+            <AddContactForm />
+            <ContactsTable contacts={contacts} />
+          </Pane>
+        </Fragment>
+      )}
     </Fragment>
   );
 };
@@ -81,4 +43,4 @@ Contacts.propTypes = {
   contacts: PropTypes.array.isRequired,
 };
 
-export default connect(null, { addContact })(Contacts);
+export default Contacts;

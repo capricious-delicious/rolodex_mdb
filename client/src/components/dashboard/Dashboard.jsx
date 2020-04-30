@@ -1,42 +1,17 @@
-import React, { useEffect, Fragment } from 'react';
-import PropTypes from 'prop-types';
-import { getContacts } from '../../actions/contacts';
-import { connect } from 'react-redux';
+import React, { Fragment, useEffect } from 'react';
 import Contacts from './Contacts';
-import { Pane, Spinner, Button } from 'evergreen-ui';
-import { Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { getContacts } from '../../actions/contacts';
+import { Pane } from 'evergreen-ui';
 
-const Dashboard = ({ getContacts, contacts }) => {
-  useEffect(() => {
-    getContacts();
-  }, []);
-
+const Dashboard = () => {
   return (
     <Fragment>
-      {contacts.loading ? (
-        <Pane
-          display='flex'
-          alignItems='center'
-          justifyContent='center'
-          height={400}
-        >
-          <Spinner />
-        </Pane>
-      ) : (
-        <Fragment>
-          <Contacts contacts={contacts} />
-        </Fragment>
-      )}
+      <Pane>
+        <Contacts />
+      </Pane>
     </Fragment>
   );
 };
 
-Dashboard.propTypes = {
-  getContacts: PropTypes.func.isRequired,
-};
-
-const mapStateToProps = (state) => ({
-  contacts: state.contactsReducer,
-});
-
-export default connect(mapStateToProps, { getContacts })(Dashboard);
+export default Dashboard;

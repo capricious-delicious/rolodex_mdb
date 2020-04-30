@@ -6,6 +6,7 @@ import {
   ADD_INTERACTION,
   DELETE_CONTACT,
   DELETE_INTERACTION,
+  GET_INTERACTIONS,
 } from './types';
 
 // Get all contacts of a user
@@ -101,8 +102,21 @@ export const deleteInteraction = (props) => async (dispatch) => {
   }
 };
 
+// Get all interactions for a contact
+export const getInteractions = ({ id }) => async (dispatch) => {
+  try {
+    const res = await axios.get(`api/contacts/interactions/${id}`);
+    dispatch({
+      type: GET_INTERACTIONS,
+      payload: res.data,
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 // Delete a contact
-export const deleteContact = ({ contact }, history) => async (dispatch) => {
+export const deleteContact = ({ contact }) => async (dispatch) => {
   const { _id } = contact;
   try {
     const res = await axios.delete(`/api/contacts/${_id}`);

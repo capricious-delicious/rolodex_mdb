@@ -6,12 +6,14 @@ import {
   DELETE_CONTACT,
   DELETE_INTERACTION,
   GET_INTERACTIONS,
+  LOGOUT,
 } from '../actions/types';
 
 const initialState = {
   contacts: [],
   contact: null,
   loading: true,
+  interactions: [],
 };
 
 export default (state = initialState, { type, payload }) => {
@@ -33,15 +35,32 @@ export default (state = initialState, { type, payload }) => {
       return {
         ...state,
         loading: false,
-        contact: null,
+      };
+    case ADD_INTERACTION:
+      return {
+        ...state,
+        loading: false,
+      };
+    case GET_INTERACTIONS:
+      return {
+        ...state,
+        interactions: payload,
+        loading: false,
       };
     case DELETE_INTERACTION:
-    case ADD_INTERACTION:
     case DELETE_CONTACT:
       return {
         ...state,
         loading: false,
       };
+    // case LOGOUT:
+    //   return {
+    //     ...state,
+    //     contacts: [],
+    //     contact: null,
+    //     loading: true,
+    //     interactions: [],
+    //   };
     default:
       return state;
   }

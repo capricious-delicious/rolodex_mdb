@@ -50,12 +50,15 @@ router.post(
 // @access  Private
 router.get('/', auth, async (req, res) => {
   const errors = validationResult(req);
+
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
 
   try {
-    const contacts = await Contact.find().sort({ date: -1 });
+    const contacts = await Contact.find({ user: req.user.id }).sort({
+      date: -1,
+    });
     res.json(contacts);
   } catch (err) {
     console.error(err.message);
@@ -64,7 +67,7 @@ router.get('/', auth, async (req, res) => {
 });
 
 // @route   GET api/contacts/:id
-// @desc    Get single contacts by ID
+// @desc    Get single contact by ID
 // @access  Private
 router.get('/:id', auth, async (req, res) => {
   try {
@@ -75,6 +78,26 @@ router.get('/:id', auth, async (req, res) => {
     }
 
     res.json(contact);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server error.');
+  }
+});
+
+// @route   GET api/contacts/interactions/:id
+// @desc    Get all interactions for a contact
+// @access  Private
+router.get('/interactions/:id', auth, async (req, res) => {
+  try {
+    const contact = await Contact.findById(req.params.id);
+
+    if (contact.user.toString() !== req.user.id) {
+      return res.status(401).json({ msg: 'User not authorized.' });
+    }
+
+    const interactions = contact.interactions;
+
+    res.json(interactions);
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server error.');
