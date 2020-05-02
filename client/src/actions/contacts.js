@@ -83,20 +83,20 @@ export const addInteraction = ({ note, contact: { _id } }) => async (
 };
 
 // Delete an interaction for a contact
-export const deleteInteraction = (props) => async (dispatch) => {
+export const deleteInteraction = async (props) => {
   const contact_id = props.contact._id;
   const interaction_id = props.interaction._id;
   try {
     console.log(contact_id);
     console.log(interaction_id);
 
-    const res = await axios.delete(
+    await axios.delete(
       `/api/contacts/interactions/${contact_id}/${interaction_id}`
     );
-    dispatch({
-      type: DELETE_INTERACTION,
-      payload: res.data,
-    });
+    // dispatch({
+    //   type: DELETE_INTERACTION,
+    //   payload: res.data,
+    // });
   } catch (err) {
     console.log(err);
   }
@@ -116,17 +116,14 @@ export const getInteractions = ({ id }) => async (dispatch) => {
 };
 
 // Delete a contact
-export const deleteContact = ({ contact }) => async (dispatch) => {
+export const deleteContact = async ({ contact }) => {
   const { _id } = contact;
   try {
-    const res = await axios.delete(`/api/contacts/${_id}`);
-    dispatch({
-      type: DELETE_CONTACT,
-      payload: res.data,
-    });
-
-    // @TODO improve this redirect
-    // history.push('/dashboard');
+    await axios.delete(`/api/contacts/${_id}`);
+    // dispatch({
+    //   type: DELETE_CONTACT,
+    //   payload: res.data,
+    // });
   } catch (err) {
     console.log(err);
   }

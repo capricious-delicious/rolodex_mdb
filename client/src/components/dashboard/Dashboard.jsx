@@ -1,14 +1,31 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import Contacts from './Contacts';
-import { useSelector, useDispatch } from 'react-redux';
-import { getContacts } from '../../actions/contacts';
 import { Pane } from 'evergreen-ui';
+import axios from 'axios';
 
 const Dashboard = () => {
+  const [contacts, setContacts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const getContacts = async () => {
+      try {
+        setIsLoading(true);
+        const res = await axios.get('/api/contacts');
+        setContacts(res.data);
+        setIsLoading(false);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    getContacts();
+  }, [contacts, isLoading]);
+
   return (
     <Fragment>
       <Pane>
-        <Contacts />
+        <Contacts contacts={contacts} />
       </Pane>
     </Fragment>
   );

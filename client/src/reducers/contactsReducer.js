@@ -6,7 +6,6 @@ import {
   DELETE_CONTACT,
   DELETE_INTERACTION,
   GET_INTERACTIONS,
-  LOGOUT,
 } from '../actions/types';
 
 const initialState = {
@@ -53,14 +52,6 @@ export default (state = initialState, { type, payload }) => {
         ...state,
         loading: false,
       };
-    // case LOGOUT:
-    //   return {
-    //     ...state,
-    //     contacts: [],
-    //     contact: null,
-    //     loading: true,
-    //     interactions: [],
-    //   };
     default:
       return state;
   }

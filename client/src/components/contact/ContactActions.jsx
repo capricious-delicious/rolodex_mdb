@@ -1,17 +1,13 @@
 import React, { Fragment, useState } from 'react';
 import { Link, withRouter, Redirect } from 'react-router-dom';
-import { Button, Pane, Dialog, TextInput } from 'evergreen-ui';
-import { addInteraction, deleteContact } from '../../actions/contacts';
-import { useDispatch, useSelector } from 'react-redux';
+import { Button } from 'evergreen-ui';
+import { deleteContact } from '../../actions/contacts';
 
 const ContactActions = ({ contact }) => {
-  const dispatch = useDispatch();
-
-  // Redirect after deleting contact
   const [toHome, setToHome] = useState(false);
 
   const handleDelete = () => {
-    dispatch(deleteContact({ contact }));
+    deleteContact({ contact });
     setToHome(true);
   };
 

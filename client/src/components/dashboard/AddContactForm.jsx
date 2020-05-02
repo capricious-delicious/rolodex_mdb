@@ -1,11 +1,24 @@
 import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
 import { TextInput, IconButton, Pane } from 'evergreen-ui';
-import { addContact } from '../../actions/contacts';
+import axios from 'axios';
 
-const AddContactForm = (props) => {
-  const dispatch = useDispatch();
+const AddContactForm = () => {
+  //
+  const addContact = async ({ name, context }) => {
+    const config = {
+      headers: {
+        'Content-type': 'application/json',
+      },
+    };
+    const body = JSON.stringify({ name, context });
+
+    try {
+      const res = await axios.post('/api/contacts', body, config);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const [formData, setFormData] = useState({
     name: '',
@@ -19,7 +32,7 @@ const AddContactForm = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(addContact(formData));
+    addContact(formData);
     setFormData({ name: '', context: '' });
   };
 

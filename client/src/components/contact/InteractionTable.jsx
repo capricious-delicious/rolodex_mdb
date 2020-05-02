@@ -1,15 +1,25 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Table, Popover, Menu, IconButton, Pane, Spinner } from 'evergreen-ui';
+import { Table, Popover, Menu, IconButton, Spinner } from 'evergreen-ui';
 import Moment from 'react-moment';
-import { useDispatch } from 'react-redux';
-import { deleteInteraction } from '../../actions/contacts';
+import axios from 'axios';
 
 const InteractionTable = ({ contact }) => {
-  const dispatch = useDispatch();
+  //
+  const deleteInteraction = async (props) => {
+    const contact_id = props.contact._id;
+    const interaction_id = props.interaction._id;
+    try {
+      axios.delete(
+        `/api/contacts/interactions/${contact_id}/${interaction_id}`
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   function handleDeleteInteraction(interaction) {
-    dispatch(deleteInteraction({ interaction, contact }));
+    deleteInteraction({ interaction, contact });
   }
 
   return (

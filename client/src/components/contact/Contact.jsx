@@ -1,22 +1,27 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useDispatch, useSelector } from 'react-redux';
-import { getContactById, deleteInteraction } from '../../actions/contacts';
 import { Pane } from 'evergreen-ui';
 import ContactActions from './ContactActions';
 import ContactTop from './ContactTop';
 import InteractionTable from './InteractionTable';
 import AddInteractionForm from './AddInteractionForm';
+import axios from 'axios';
 
 const Contact = ({ match }) => {
-  const dispatch = useDispatch();
-  const contacts = useSelector((state) => state.contactsReducer);
+  const [contact, setContact] = useState(null);
 
-  const { contact, loading } = contacts;
+  const getContactById = async () => {
+    try {
+      const res = await axios.get(`/api/contacts/${match.params.id}`);
+      setContact(res.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   useEffect(() => {
-    dispatch(getContactById(match.params.id));
-  }, [match.params.id, contact]);
+    getContactById();
+  }, [contact]);
 
   return (
     <Pane>

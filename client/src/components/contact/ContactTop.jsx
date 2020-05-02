@@ -8,7 +8,7 @@ const ContactTop = ({ contact }) => {
       {contact && (
         <Pane>
           <h3>{contact.name}</h3>
-          <p>How we met: {contact.context}</p>
+          <p>Context: {contact.context}</p>
         </Pane>
       )}
     </Fragment>
