@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { logout } from '../../actions/auth';
+import logo from './profile.png';
 
 const Navbar = ({ state, auth: { isAuthenticated, loading }, logout }) => {
   const authLinks = (
@@ -37,7 +38,7 @@ const Navbar = ({ state, auth: { isAuthenticated, loading }, logout }) => {
     <nav className='navbar bg-dark'>
       <h1>
         <Link to='/'>
-          <i className='fas fa-address-book' /> Rolodex
+          <i className='fas fa-address-book' /> RDex
         </Link>
       </h1>
       {!loading && (
